@@ -37,11 +37,18 @@ jobs:
         with:
           node-version: '14.x'
 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
       - name: Creating Build and deploying 🪜
         run: |
           cd lambda
 
-          for fun in connect disconnect creategroup join jump message ; do
+          for fun in connect disconnect creategroup join jump message isplaying ; do
             cd ${fun}
 
             npm install
@@ -54,6 +61,8 @@ jobs:
 
             echo ----${fun}----
             du -hs deploy.zip
+
+            aws lambda update-function-code --function-name=ineuron_${fun} --zip-file=fileb://deploy.zip
 
             cd ..
           done
