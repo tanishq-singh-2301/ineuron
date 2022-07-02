@@ -139,7 +139,25 @@ const Play = (): JSX.Element => {
                         </HStack>
                         <Center height="90%" width="full" py="8" >
                             <VStack height="full" width="full" borderRadius="2" borderWidth="1" borderColor="gray.700">
-                                <VStack width="full" height="90%"></VStack>
+                                <VStack width="full" height="90%" justifyContent="flex-end">
+
+                                    <HStack width="full" justifyContent="space-between" alignItems="flex-start" py="5" px="6" borderTopColor="gray.700" borderTopWidth="1">
+                                        <Avatar
+                                            source={{
+                                                uri: "https://images.unsplash.com/photo-1607746882042-944635dfe10e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
+                                            }}
+                                            alignSelf="flex-start"
+                                            bg="amber.500"
+                                            size="sm"
+                                            mr="6"
+                                        />
+                                        <Text color="gray.400" fontSize="md">
+                                            <Text color="blue.400" fontSize="md">11:11</Text>&ensp;
+                                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quam perferendis quis exercitationem fuga vero placeat unde quos ab optio suscipit? Deserunt, officiis natus eveniet illum ad ipsum molestias mollitia recusandae!
+                                        </Text>
+                                    </HStack>
+
+                                </VStack>
                                 <HStack width="full" alignItems="center" justifyContent="space-between" px="5" height="10%" borderTopColor="gray.700" borderTopWidth="1">
                                     <Avatar
                                         source={{
@@ -158,6 +176,7 @@ const Play = (): JSX.Element => {
                                         placeholder="Enter Message"
                                         value={message}
                                         onChangeText={(t) => setMessage(t)}
+                                        color="white"
                                     />
                                     <Button size="xs" rounded="none" variant="ghost" w="10%">
                                         <ChevronRightIcon />
