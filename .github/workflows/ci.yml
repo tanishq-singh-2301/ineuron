@@ -52,6 +52,7 @@ jobs:
             du -hs ./dist
             zip -r deploy.zip dist
 
+            echo ----${fun}----
             du -hs deploy.zip
 
             cd ..
