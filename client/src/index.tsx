@@ -1,30 +1,38 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import App from "./App";
+import React from "react";// @ts-ignore
+import { createRoot } from "react-dom/client";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from "./app/home";
 import { NativeBaseProvider, extendTheme } from "native-base";
-import reportWebVitals from "./reportWebVitals";
+import './globals.css';
 
 const theme = extendTheme({
   config: {
-    initialColorMode: "dark",
+    initialColorMode: "light",
   },
 });
 
-// extend the theme
 type MyThemeType = typeof theme;
 declare module "native-base" {
-  interface ICustomTheme extends MyThemeType {}
+  interface ICustomTheme extends MyThemeType { }
 }
-ReactDOM.render(
+
+const App = (): JSX.Element => {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+    </Routes>
+  )
+}
+
+const container = document.getElementById('root');
+const root = createRoot(container);
+
+root.render(
   <React.StrictMode>
     <NativeBaseProvider theme={theme}>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </NativeBaseProvider>
-  </React.StrictMode>,
-  document.getElementById("root")
+  </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
