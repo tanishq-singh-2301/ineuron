@@ -2,14 +2,11 @@ import { Box, Text, Image, HStack, Hidden, Center, Avatar, Button, VStack, Link,
 import { useState } from "react";
 import { IoSearchOutline } from 'react-icons/io5';
 import shows from '../data';
-import { useNavigate } from 'react-router-dom';
 
 const ntp = (num: number): string => num.toString().concat("%");
 
 const App = (): JSX.Element => {
   const [show, setShow] = useState(0);
-  const navigate = useNavigate();
-
   return (
     <main>
       <Box

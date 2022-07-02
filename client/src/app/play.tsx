@@ -1,4 +1,4 @@
-import { AspectRatio, Box, Text, Heading, Hidden, HStack, IconButton, MoonIcon, Stack, SunIcon, useColorMode, useDisclose, VStack, Button, ChevronDownIcon, Actionsheet, Center, Slide, Alert, ChevronUpIcon, Avatar, Input, ChevronRightIcon, CloseIcon } from 'native-base';
+import { AspectRatio, Box, Text, Heading, Hidden, HStack, IconButton, MoonIcon, Stack, SunIcon, VStack, Button, Center, ChevronUpIcon, Avatar, Input, ChevronRightIcon, CloseIcon } from 'native-base';
 import shows from '../data';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -8,7 +8,7 @@ import { IoSearchOutline } from 'react-icons/io5';
 const Play = (): JSX.Element => {
     const params = useParams();
     const navigate = useNavigate();
-    const { colorMode } = useColorMode();
+    // const { colorMode } = useColorMode();
     const [show, setShow] = useState<number | null>(null);
     const [isOpen, setIsOpen] = useState(false);
     const [message, setMessage] = useState("");
@@ -18,7 +18,9 @@ const Play = (): JSX.Element => {
             setShow(parseInt(params.index) - 1)
 
         else
-            navigate("/")
+            navigate("/");
+
+        // eslint-disable-next-line
     }, []);
 
     return (
@@ -191,15 +193,15 @@ const Play = (): JSX.Element => {
     )
 }
 
-const ToggleDarkMode = (): JSX.Element => {
-    const { colorMode, toggleColorMode } = useColorMode();
-    return (
-        <Box>
-            <IconButton onPress={toggleColorMode}>
-                {colorMode === "dark" ? <SunIcon /> : <MoonIcon />}
-            </IconButton>
-        </Box>
-    );
-}
+// const ToggleDarkMode = (): JSX.Element => {
+//     const { colorMode, toggleColorMode } = useColorMode();
+//     return (
+//         <Box>
+//             <IconButton onPress={toggleColorMode}>
+//                 {colorMode === "dark" ? <SunIcon /> : <MoonIcon />}
+//             </IconButton>
+//         </Box>
+//     );
+// }
 
 export default Play;
