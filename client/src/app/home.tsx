@@ -1,58 +1,24 @@
-import { Box, useColorMode, Text, IconButton, SunIcon, MoonIcon, Image, HStack, Hidden, Center, Avatar, HamburgerIcon, Button, PresenceTransition, VStack, Link, Slide, CheckIcon, Menu, Pressable, AspectRatio } from "native-base";
+import { Box, Text, Image, HStack, Hidden, Center, Avatar, Button, VStack, Link, Pressable, AspectRatio, Heading } from "native-base";
 import { useState } from "react";
-import { IoMenuOutline } from 'react-icons/io5'
-
-const data = [
-  {
-    name: "Ray and the last dragon",
-    yt: `https://www.youtube.com/watch?v=1VIZ89FEjYI`,
-    desc: `"Raya and the Last Dragon" takes us on an exciting, epic journey to the fantasy world of Kumandra, where humans and dragons lived together long ago in harmony. But when an evil force threatened the land, the dragons sacrificed themselves to save humanity. Now, 500 years later, that same evil has returned and it's up to a lone warrior, Raya, to track down the legendary last dragon to restore the fractured land and its divided people. However, along her journey, she’ll learn that it’ll take more than a dragon to save the world—it’s going to take trust and teamwork as well`,
-    rating: 9.4,
-    date: "March 5, 2021",
-    id: "ray"
-  },
-  {
-    name: "Dragons",
-    yt: `https://www.youtube.com/watch?v=Vv9KJYUnVvA`,
-    desc: `Hiccup (Jay Baruchel) is a Norse teenager from the island of Berk, where fighting dragons is a way of life. His progressive views and weird sense of humor make him a misfit, despite the fact that his father (Gerard Butler) is chief of the clan. Tossed into dragon-fighting school, he endeavors to prove himself as a true Viking, but when he befriends an injured dragon he names Toothless, he has the chance to plot a new course for his people's future.`,
-    rating: 8.9,
-    date: "April 26, 2022",
-    id: "dragons"
-  },
-  {
-    name: "John Wick",
-    yt: "https://www.youtube.com/watch?v=C0BMx-qxsP4",
-    desc: `An ex-hitman comes out of retirement to track down the gangsters that took everything from him. With New York City as his bullet-riddled playground, JOHN WICK (Keanu Reeves) is a fresh and stylized take on the "assassin genre".`,
-    rating: 8.3,
-    date: "September 15, 2020",
-    id: "john"
-  },
-  {
-    name: "Deadpool",
-    yt: "https://www.youtube.com/watch?v=Sy8nPI85Ih4",
-    desc: `Copyright Disclaimer Under Section 107 of the Copyright Act 1976, allowance is made for "fair use" for purposes such as criticism, comment, news reporting, teaching, scholarship, and research. Fair use is a use permitted by copyright statute that might otherwise be infringing. Non-profit, educational or personal use tips the balance in favor of fair use. No copyright infringement intended.`,
-    rating: 9.2,
-    date: "Octuber 15, 2301",
-    id: "deadpool"
-  }
-]
+import { IoSearchOutline } from 'react-icons/io5';
+import shows from '../data';
+import { useNavigate } from 'react-router-dom';
 
 const ntp = (num: number): string => num.toString().concat("%");
 
 const App = (): JSX.Element => {
-  const { colorMode } = useColorMode();
-  const [menu, setMenu] = useState(false);
+  const [show, setShow] = useState(shows[0].id);
+  const navigate = useNavigate();
 
   return (
-    <main id="home">
+    <main>
       <Box
-        bg={colorMode === "light" ? "coolGray.50" : "coolGray.900"}
         minHeight="full"
         justifyContent="center"
       >
         <Image
           source={{
-            uri: `./data/ray/video_thumb.jpg`
+            uri: `./data/${show}/video_thumb.jpg`
           }}
           resizeMode="cover"
           width="full"
@@ -85,22 +51,57 @@ const App = (): JSX.Element => {
               </HStack>
             </Hidden>
             <Center>
-              <Avatar
-                source={{
-                  uri: "https://images.unsplash.com/photo-1607746882042-944635dfe10e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-                }}
-                alignSelf="center"
-                bg="amber.500"
-                size="md"
-              />
+              <HStack alignItems="center">
+                <IoSearchOutline size={26} color="white" />
+
+                <Avatar
+                  source={{
+                    uri: "https://images.unsplash.com/photo-1607746882042-944635dfe10e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
+                  }}
+                  alignSelf="center"
+                  bg="amber.500"
+                  size="md"
+                  ml="10"
+                />
+              </HStack>
             </Center>
           </HStack>
 
-          <HStack
-            width="full"
-            height={[ntp(2.8 / 7 * 100), ntp(3.8 / 7 * 100)]}
-          >
-          </HStack>
+          {
+            shows.map(({ id }, index) => {
+              if (id === show) {
+                return (
+                  <VStack
+                    width="full"
+                    height={[ntp(2.8 / 7 * 100), ntp(3.8 / 7 * 100)]}
+                    py="8"
+                  >
+                    <HStack height="50%" alignItems={["center", "center", "flex-end"]} maxWidth={["full", "2/3", "1/3"]} >
+                      <Heading color="white" fontWeight="bold" fontSize={["4xl", "5xl", "6xl", "7xl"]}>{shows[index].fullName.toUpperCase()}</Heading>
+                    </HStack>
+                    <HStack height="15%" alignItems="center">
+                      <Text color="success.500" fontWeight="medium" fontSize="lg">{shows[index].rating * 10}%</Text> &ensp;
+                      <Text color="success.500" fontWeight="medium" fontSize="lg">{shows[index].date.split(" ")[0]}</Text> &ensp;
+                      <Text color="white" fontWeight="medium" fontSize="lg">{shows[index].date.split(" ")[1]}</Text>
+                    </HStack>
+                    <HStack height="35%" alignItems={["center", "center", "flex-start"]}>
+                      <Button py={["2.5", "3"]} px={["8", "9", "12"]} mt={[0, 0, "1.5"]} bg="purple.600" borderRadius="full" _hover={{ bg: "purple.700" }}>
+                        <Text
+                          color="white"
+                          fontWeight="bold"
+                          fontSize={["sm", "sm", "md"]}
+                          onPress={() => {
+                            navigate(`/play/${index}`)
+                          }}
+                        >Play</Text>
+                      </Button>
+                    </HStack>
+                  </VStack>
+                )
+              }
+
+            })
+          }
 
 
           <HStack
@@ -113,25 +114,31 @@ const App = (): JSX.Element => {
             px="2"
           >
             {
-              data.map(({ date, desc, id, name, rating, yt }) => {
+              shows.map(({ id, name }) => {
                 return (
                   <AspectRatio
-                    height="90%"
+                    height={["95%", "95%", "90%"]}
                     ratio={3 / 4}
-                    bg="white"
-                    borderRadius="sm"
-                    position="relative"
-                    overflow="hidden"
+                    key={id}
                   >
-                    <Center>
-                      <Image
-                        source={{
-                          uri: `./data/${id}/thumb.jpg`
-                        }}
-                        height="full"
-                        width="full"
-                      />
-                    </Center>
+                    <Pressable height="full" width="full" onPress={() => setShow(id)}>
+                      {({ isHovered }) => {
+                        return (
+                          <Center position="relative" height="full" width="full" overflow="hidden" borderRadius="sm">
+                            <Image
+                              source={{
+                                uri: `./data/${id}/thumb.jpg`
+                              }}
+                              height="full"
+                              width="full"
+                              position="absolute"
+                            />
+                            <Text color="white" fontWeight="extrabold" fontSize={isHovered ? "19" : "18"} zIndex="0" textAlign="center" >{name.replaceAll(" ", `\n`)}</Text>
+                          </Center>
+                        )
+                      }}
+
+                    </Pressable>
                   </AspectRatio>
                 )
               })
@@ -142,19 +149,6 @@ const App = (): JSX.Element => {
 
       </Box>
     </main>
-  );
-}
-
-const ToggleDarkMode = (): JSX.Element => {
-  const { colorMode, toggleColorMode } = useColorMode();
-  return (
-    <Box>
-      <IconButton
-        onPress={toggleColorMode}
-      >
-        {colorMode === "dark" ? <SunIcon /> : <MoonIcon />}
-      </IconButton>
-    </Box>
   );
 }
 
