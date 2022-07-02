@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 const ntp = (num: number): string => num.toString().concat("%");
 
 const App = (): JSX.Element => {
-  const [show, setShow] = useState(shows[0].id);
+  const [show, setShow] = useState(0);
   const navigate = useNavigate();
 
   return (
@@ -18,7 +18,7 @@ const App = (): JSX.Element => {
       >
         <Image
           source={{
-            uri: `./data/${show}/video_thumb.jpg`
+            uri: `./data/${shows[show].id}/video_thumb.jpg`
           }}
           resizeMode="cover"
           width="full"
@@ -67,41 +67,33 @@ const App = (): JSX.Element => {
             </Center>
           </HStack>
 
-          {
-            shows.map(({ id }, index) => {
-              if (id === show) {
-                return (
-                  <VStack
-                    width="full"
-                    height={[ntp(2.8 / 7 * 100), ntp(3.8 / 7 * 100)]}
-                    py="8"
-                  >
-                    <HStack height="50%" alignItems={["center", "center", "flex-end"]} maxWidth={["full", "2/3", "1/3"]} >
-                      <Heading color="white" fontWeight="bold" fontSize={["4xl", "5xl", "6xl", "7xl"]}>{shows[index].fullName.toUpperCase()}</Heading>
-                    </HStack>
-                    <HStack height="15%" alignItems="center">
-                      <Text color="success.500" fontWeight="medium" fontSize="lg">{shows[index].rating * 10}%</Text> &ensp;
-                      <Text color="success.500" fontWeight="medium" fontSize="lg">{shows[index].date.split(" ")[0]}</Text> &ensp;
-                      <Text color="white" fontWeight="medium" fontSize="lg">{shows[index].date.split(" ")[1]}</Text>
-                    </HStack>
-                    <HStack height="35%" alignItems={["center", "center", "flex-start"]}>
-                      <Button py={["2.5", "3"]} px={["8", "9", "12"]} mt={[0, 0, "1.5"]} bg="purple.600" borderRadius="full" _hover={{ bg: "purple.700" }}>
-                        <Text
-                          color="white"
-                          fontWeight="bold"
-                          fontSize={["sm", "sm", "md"]}
-                          onPress={() => {
-                            navigate(`/play/${index}`)
-                          }}
-                        >Play</Text>
-                      </Button>
-                    </HStack>
-                  </VStack>
-                )
-              }
 
-            })
-          }
+          <VStack
+            width="full"
+            height={[ntp(2.8 / 7 * 100), ntp(3.8 / 7 * 100)]}
+            py="8"
+          >
+            <HStack height="50%" alignItems={["center", "center", "flex-end"]} maxWidth={["full", "2/3", "1/3"]} >
+              <Heading color="white" fontWeight="bold" fontSize={["4xl", "5xl", "6xl", "7xl"]}>{shows[show].fullName.toUpperCase()}</Heading>
+            </HStack>
+            <HStack height="15%" alignItems="center">
+              <Text color="success.500" fontWeight="medium" fontSize="lg">{shows[show].rating * 10}%</Text> &ensp;
+              <Text color="success.500" fontWeight="medium" fontSize="lg">{shows[show].date.split(" ")[0]}</Text> &ensp;
+              <Text color="white" fontWeight="medium" fontSize="lg">{shows[show].date.split(" ")[1]}</Text>
+            </HStack>
+            <HStack height="35%" alignItems={["center", "center", "flex-start"]}>
+              <Link href={`/play/${(show + 1).toString()}`}>
+                <Button py={["2.5", "3"]} px={["8", "9", "12"]} mt={[0, 0, "1.5"]} bg="purple.600" borderRadius="full" _hover={{ bg: "purple.700" }}>
+                  <Text
+                    color="white"
+                    fontWeight="bold"
+                    fontSize={["sm", "sm", "md"]}
+                  >Play</Text>
+                </Button>
+              </Link>
+            </HStack>
+          </VStack>
+
 
 
           <HStack
@@ -114,14 +106,14 @@ const App = (): JSX.Element => {
             px="2"
           >
             {
-              shows.map(({ id, name }) => {
+              shows.map(({ id, name }, index) => {
                 return (
                   <AspectRatio
                     height={["95%", "95%", "90%"]}
                     ratio={3 / 4}
                     key={id}
                   >
-                    <Pressable height="full" width="full" onPress={() => setShow(id)}>
+                    <Pressable height="full" width="full" onPress={() => setShow(index)}>
                       {({ isHovered }) => {
                         return (
                           <Center position="relative" height="full" width="full" overflow="hidden" borderRadius="sm">
