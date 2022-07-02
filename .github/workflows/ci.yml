@@ -37,9 +37,25 @@ jobs:
         with:
           node-version: '14.x'
 
-      - name: Creating Build Foler 🪜
+      - name: Creating Build and deploying 🪜
         run: |
-          echo hey!
+          cd lambda
+
+          for fun in connect disconnect creategroup join jump message ; do
+            cd ${fun}
+
+            npm install
+            npm run build
+
+            cp package.json ./dist/package.json
+
+            du -hs ./dist
+            zip -r deploy.zip dist
+
+            du -hs deploy.zip
+
+            cd ..
+          done
 
   test:
     needs: [build_client]
@@ -90,7 +106,7 @@ jobs:
       - name: Update ec2 application 💿
         run: |
           ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
-            cd app
+            cd ineuron
             git checkout
             git fetch --all
             git reset --hard origin/main
