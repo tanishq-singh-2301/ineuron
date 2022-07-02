@@ -18,7 +18,7 @@ jobs:
         run: cd client && npm i
 
       - name: Build App 📦
-        run: cd client && npm run build
+        run: cd client && REACT_APP_PUBLIC_WS_ENDPOINT=${{secrets.WS}} npm run build
 
       - name: Uploading client_build artifact ☁️
         uses: actions/upload-artifact@v2

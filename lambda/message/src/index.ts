@@ -20,7 +20,7 @@ exports.handler = async (event: APIGatewayEvent) => {
                 }
             }).promise();
 
-            await Promise.all(roomsForJump.Item.users.map(async (user: string) => await sendMessage(user, JSON.stringify({ action: 'messasge', message: body['message'], name: body.name }))));
+            await Promise.all(roomsForJump.Item.users.map(async (user: string) => await sendMessage(user, JSON.stringify({ action: 'messasge', message: body['message'], name: body.name, uri: body.uri }))));
         } else {
             await sendMessage(user_id, JSON.stringify({ status: 400, message: 'room-id, name or message is missing' }));
         }
