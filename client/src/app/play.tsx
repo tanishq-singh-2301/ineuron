@@ -29,12 +29,12 @@ const Play = (): JSX.Element => {
             position="relative"
         >
             {(show !== null) ?
-                <Stack direction={["column", "column", "column", "row"]} height="full" bg="muted.900" width={["full", "full", "full", "3/5", "4/6"]}>
+                <Stack direction="column" height="full" bg="muted.900" width={["full", "full", "full", "3/5", "4/6"]}>
                     <HStack height={["12", "12", "12", "16"]} px="5" alignItems="center" width="full" borderBottomColor="gray.700" borderBottomWidth="1">
                         <Heading color="gray.50" fontSize="lg" fontWeight="bold" >INeuron</Heading>
                     </HStack>
-                    <AspectRatio ratio={16 / 9} width="full" borderBottomColor="gray.700" borderBottomWidth="1">
-                        <HStack width="full" height="full">
+                    <AspectRatio ratio={16 / 9} height="full" borderBottomColor="gray.700" borderBottomWidth={["1", "1", "1", "0"]}>
+                        <HStack px={[0, 0, 0, 8]} pt={[0, 0, 0, 8]} pb={[0, 0, 0, 6]}>
                             <ReactPlayer
                                 url={shows[show].yt}
                                 width="100%"
@@ -43,13 +43,15 @@ const Play = (): JSX.Element => {
                             />
                         </HStack>
                     </AspectRatio>
-                    {/* <VStack width="full" position="relative">
-                        <HStack px="6" py="3" pb="1.5" alignItems="center" justifyContent="space-between">
+                    <VStack width="full" position="relative">
+                        <HStack px="6" py="3" pt={[3, 3, 3, 0]} pb="1.5" alignItems="center" justifyContent="space-between">
                             <Text color="white" fontSize="2xl" fontWeight="medium" >{shows[show].fullName}</Text>
 
-                            <Button onPress={() => setIsOpen(!isOpen)} variant="ghost">
-                                <ChevronUpIcon />
-                            </Button>
+                            <Hidden from="xl">
+                                <Button onPress={() => setIsOpen(!isOpen)} variant="ghost">
+                                    <ChevronUpIcon />
+                                </Button>
+                            </Hidden>
                         </HStack>
                         {isOpen ? "" : <VStack width="full">
                             <HStack px="6" justifyContent="flex-start">
@@ -117,7 +119,7 @@ const Play = (): JSX.Element => {
 
                             </VStack>
                         </VStack> : ""}
-                    </VStack> */}
+                    </VStack>
                 </Stack> : ""}
             <Hidden till="lg">
                 <Stack direction={["column", "column", "column", "row"]} height="full" bg="muted.900" width={["full", "full", "full", "2/5", "2/6"]}>
@@ -135,6 +137,34 @@ const Play = (): JSX.Element => {
                                 ml="8"
                             />
                         </HStack>
+                        <Center height="90%" width="full" py="8" >
+                            <VStack height="full" width="full" borderRadius="2" borderWidth="1" borderColor="gray.700">
+                                <VStack width="full" height="90%"></VStack>
+                                <HStack width="full" alignItems="center" justifyContent="space-between" px="5" height="10%" borderTopColor="gray.700" borderTopWidth="1">
+                                    <Avatar
+                                        source={{
+                                            uri: "https://images.unsplash.com/photo-1607746882042-944635dfe10e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
+                                        }}
+                                        alignSelf="center"
+                                        bg="amber.500"
+                                        size="sm"
+                                    />
+
+                                    <Input
+                                        type="text"
+                                        w="70%"
+                                        variant="underlined"
+                                        _focus={{ borderWidth: 0 }}
+                                        placeholder="Enter Message"
+                                        value={message}
+                                        onChangeText={(t) => setMessage(t)}
+                                    />
+                                    <Button size="xs" rounded="none" variant="ghost" w="10%">
+                                        <ChevronRightIcon />
+                                    </Button>
+                                </HStack>
+                            </VStack>
+                        </Center>
                     </VStack>
                 </Stack>
             </Hidden>
