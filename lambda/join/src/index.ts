@@ -15,13 +15,20 @@ exports.handler = async (event: APIGatewayEvent) => {
         if (body.uid && body.name) {
             const a = await dynamo.get({
                 TableName: process.env.TABLE_NAME,
-                Key: { uid: body.uid }
+                Key: { "uid": body["uid"] }
             }).promise();
 
             try {
-                const names = [...a.Item.names, body.name];
-                const users = [...a.Item.users, user_id];
+                let names: string[];
+                let users: string[];
 
+                try {
+                    names = [...a.Item.names, body.name];
+                    users = [...a.Item.users, user_id];
+                } catch (e) {
+                    names = [body.name];
+                    users = [user_id];
+                }
                 await dynamo.update({
                     TableName: process.env.TABLE_NAME,
                     Key: {
@@ -41,7 +48,7 @@ exports.handler = async (event: APIGatewayEvent) => {
 
                 await sendMessage(user_id, JSON.stringify({ status: 200, message: 'added to group', names }));
                 await Promise.all(users.map(async (id: string) => await sendMessage(id, JSON.stringify({ action: "usersConnected", names }))))
-            } catch {
+            } catch (_a) {
                 await sendMessage(user_id, JSON.stringify({ status: 400, message: 'group dosent exist.' }));
             }
         } else {

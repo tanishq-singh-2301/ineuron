@@ -5,15 +5,5 @@ const api = new ApiGatewayManagementApi({ endpoint: process.env.API_GATEWAY_WS_E
 const sendMessage = async (ConnectionId: string, Data: string) => await api.postToConnection({ ConnectionId, Data }).promise();
 
 exports.handler = async (event: APIGatewayEvent) => {
-    const user_id = event.requestContext.connectionId;
-
-    try {
-        await sendMessage(user_id, JSON.stringify({
-            connected: true
-        }));
-    } catch (error) {
-        return { statusCode: 300 };
-    }
-
     return { statusCode: 200 };
 };

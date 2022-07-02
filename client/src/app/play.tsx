@@ -1,9 +1,10 @@
 import { AspectRatio, Box, Text, Heading, Hidden, HStack, Stack, VStack, Button, Center, ChevronUpIcon, Avatar, Input, ChevronRightIcon, CloseIcon } from 'native-base';
 import shows from '../data';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import ReactPlayer from 'react-player';
 import { IoSearchOutline } from 'react-icons/io5';
+import { WsContext } from '../../context/websocket';
 
 const Play = (): JSX.Element => {
     const params = useParams();
@@ -12,6 +13,21 @@ const Play = (): JSX.Element => {
     const [show, setShow] = useState<number | null>(null);
     const [isOpen, setIsOpen] = useState(false);
     const [message, setMessage] = useState("");
+    const { ws } = useContext(WsContext);
+
+    const sendMessage = (message: string) => {
+        if (typeof window !== "undefined") {
+            try {
+                ws.send(message)
+            } catch {
+                window.location.replace(window.location.origin);
+            }
+        };
+
+        ws.onmessage = message => {
+            console.log(message);
+        }
+    };
 
     useEffect(() => {
         if (params.index)

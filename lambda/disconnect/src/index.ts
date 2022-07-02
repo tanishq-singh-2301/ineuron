@@ -8,7 +8,7 @@ const sendMessage = async (ConnectionId: string, Data: string) => await api.post
 
 exports.handler = async (event: APIGatewayEvent) => {
     const user_id = event.requestContext.connectionId;
-    const route = event.requestContext.routeKey;
+    // const route = event.requestContext.routeKey;
 
     try {
 
@@ -32,33 +32,33 @@ exports.handler = async (event: APIGatewayEvent) => {
             users.splice(index, 1);
             names.splice(index, 1);
 
-            if (users.length === 0) {
-                await dynamo.delete({
-                    TableName: process.env.TABLE_NAME,
-                    Key: {
-                        uid: data.Items[0].uid
-                    },
-                }).promise();
-            } else {
-                await dynamo.update({
-                    TableName: process.env.TABLE_NAME,
-                    Key: {
-                        uid: data.Items[0].uid
-                    },
-                    UpdateExpression: "set #users=:x, #names=:n",
-                    ExpressionAttributeNames: {
-                        "#users": "users",
-                        "#names": "names"
-                    },
-                    ExpressionAttributeValues: {
-                        ":x": [...users],
-                        ":n": [...names]
-                    },
-                    ReturnValues: "UPDATED_NEW"
-                }).promise();
+            // if (users.length === 0) {
+            //     await dynamo.delete({
+            //         TableName: process.env.TABLE_NAME,
+            //         Key: {
+            //             uid: data.Items[0].uid
+            //         },
+            //     }).promise();
+            // } else {
+            await dynamo.update({
+                TableName: process.env.TABLE_NAME,
+                Key: {
+                    uid: data.Items[0].uid
+                },
+                UpdateExpression: "set #users=:x, #names=:n",
+                ExpressionAttributeNames: {
+                    "#users": "users",
+                    "#names": "names"
+                },
+                ExpressionAttributeValues: {
+                    ":x": [...users],
+                    ":n": [...names]
+                },
+                ReturnValues: "UPDATED_NEW"
+            }).promise();
 
-                await Promise.all(users.map(async (id: string) => await sendMessage(id, JSON.stringify({ action: "usersConnected", names }))));
-            }
+            await Promise.all(users.map(async (id: string) => await sendMessage(id, JSON.stringify({ action: "usersConnected", names }))));
+            // }
         }
 
     } catch (error) {
