@@ -1,7 +1,7 @@
 on:
   push:
     branches:    
-      - 'do_not_push'
+      - 'main'
 
 jobs:
   build_client:
@@ -37,29 +37,12 @@ jobs:
         with:
           node-version: '14.x'
 
-      - name: Install 📝
-        run: cd backend && npm i
-
-      - name: Build App 📦
-        run: cd backend && npm run build
-
       - name: Creating Build Foler 🪜
         run: |
-          cd backend
-
-          mkdir server_build
-          cp -r dist ./server_build/dist
-          cp ./package.json ./server_build/package.json
-
-      - name: Uploading server_build artifact ☁️
-        uses: actions/upload-artifact@v2
-        with:
-          name: server_build
-          path: backend/server_build
-          retention-days: 1
+          echo hey!
 
   test:
-    needs: [build_server, build_client]
+    needs: [build_client]
     name: Testing App and server 😗
     runs-on: ubuntu-latest
 
@@ -75,71 +58,10 @@ jobs:
           name: client_build
           path: client_build
 
-      - name: Downloading server_build artifact 🌨️
-        uses: actions/download-artifact@v2
-        with:
-          name: server_build
-          path: server_build
-
       - name: Testing App and server 📜
         run: |
           ls
           echo hey
-
-  deploy_server:
-    needs: test
-    name: Update server ec2 🤖🖥️
-    runs-on: ubuntu-latest
-    env:
-      PRIVATE_KEY: ${{ secrets.SERVER_KEY  }}
-      HOSTNAME : ${{ secrets.SERVER_HOSTNAME  }}
-      USER_NAME : ${{ secrets.SERVER_USERNAME  }}
-
-    steps:
-      - uses: actions/checkout@v2 
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '14.x'
-
-      - name: Downloading server_build artifact 🌨️
-        uses: actions/download-artifact@v2
-        with:
-          name: server_build
-          path: server_build
-
-      - name: Changing permissions of PRIVATE_KEY ⚙️
-        run: echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-
-      - name: Update ec2 application 💿
-        run: |
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
-            cd app
-            git checkout
-            git fetch --all
-            git reset --hard origin/main
-            git pull origin main
-
-            cd ..
-            
-            pm2 stop 0
-            pm2 kill
-
-            pm2 ls
-
-            rm -r -f -d server_build
-          '
-
-      - name: Uploading build folder to ec2 ☔
-        run: scp -o StrictHostKeyChecking=no -i private_key -r server_build ${USER_NAME}@${HOSTNAME}:/home/ubuntu/server_build
-
-      - name: Releasing new build to internet 🌐
-        run: |
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
-            cd server_build
-            npm i
-
-            pm2 start node --name "server_build" -- dist/index.js
-          '
 
   deploy_client:
     needs: test
