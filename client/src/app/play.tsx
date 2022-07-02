@@ -1,4 +1,4 @@
-import { AspectRatio, Box, Text, Heading, Hidden, HStack, IconButton, MoonIcon, Stack, SunIcon, VStack, Button, Center, ChevronUpIcon, Avatar, Input, ChevronRightIcon, CloseIcon } from 'native-base';
+import { AspectRatio, Box, Text, Heading, Hidden, HStack, Stack, VStack, Button, Center, ChevronUpIcon, Avatar, Input, ChevronRightIcon, CloseIcon } from 'native-base';
 import shows from '../data';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
