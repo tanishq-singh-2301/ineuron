@@ -55,14 +55,17 @@ jobs:
             npm run build
 
             cp package.json ./dist/package.json
+            cd dist
 
-            du -hs ./dist
-            zip -r deploy.zip dist
+            du -hs .
+            zip -r deploy.zip ./*
 
             echo ----${fun}----
             du -hs deploy.zip
 
             aws lambda update-function-code --function-name=ineuron_${fun} --zip-file=fileb://deploy.zip
+
+            cd ..
 
             cd ..
           done
