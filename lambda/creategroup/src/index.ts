@@ -12,17 +12,16 @@ exports.handler = async (event: APIGatewayEvent) => {
     try {
         const body = JSON.parse(event.body);
 
-        if (body.uid && body.name) {
+        if (body.uid && body.name && body.custom) {
             await dynamo.put({
                 TableName: process.env.TABLE_NAME,
                 Item: {
                     uid: body.uid,
                     users: [user_id],
                     names: [body.name],
-                    ttl: (Math.floor(Date.now() / 1000) + (8 * 3600))
+                    custom: body.custom
                 }
             }).promise();
-
             await sendMessage(user_id, JSON.stringify({ status: 200, message: 'group created' }));
         }
     } catch (error) {
