@@ -37,6 +37,10 @@ we don't connect 👉👈 user to directly to our backend rather we give this jo
 ---
 <img src="./presentation/images/apigate_to_lambda.jpeg" width="100%" alt="sharp logo" align="center" style="padding-bottom:30px; padding-top:10px;">
 
+## Don't forgot to check out workflows
+---
+<img src="./presentation/images/workflow.png" width="100%" alt="sharp logo" align="center" style="padding-bottom:30px; padding-top:10px;">
+
 
 ## Getting Started
 ---
