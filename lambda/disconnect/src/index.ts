@@ -55,7 +55,7 @@ exports.handler = async (event: APIGatewayEvent) => {
                     },
                     ReturnValues: "UPDATED_NEW"
                 }).promise();
-                await Promise.all(users.map(async (id) => await sendMessage(id, JSON.stringify({ action: "usersConnected", names }))));
+                await Promise.all(users.map(async (id: string) => await sendMessage(id, JSON.stringify({ action: "usersConnected", names }))));
             }
         }
 
