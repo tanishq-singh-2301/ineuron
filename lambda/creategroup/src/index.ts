@@ -12,6 +12,7 @@ exports.handler = async (event: APIGatewayEvent) => {
     try {
         const body = JSON.parse(event.body);
 
+        // If all the requirements are full filled create a item in a table and put the user in it. 
         if (body.uid && body.name && body.custom) {
             await dynamo.put({
                 TableName: process.env.TABLE_NAME,

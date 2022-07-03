@@ -6,10 +6,14 @@ const dynamo = new DynamoDB.DocumentClient({ apiVersion: '2012-08-10', region: p
 
 const sendMessage = async (ConnectionId: string, Data: string) => await api.postToConnection({ ConnectionId, Data }).promise();
 
+/**
+ * Remove the user from the group,
+ * and then if the group is empty and custom made then delete it,
+ * otherwise keep it
+ */
+
 exports.handler = async (event: APIGatewayEvent) => {
     const user_id = event.requestContext.connectionId;
-    // const route = event.requestContext.routeKey;
-
     try {
 
         const data = await dynamo.scan({

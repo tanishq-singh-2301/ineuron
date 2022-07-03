@@ -6,6 +6,9 @@ const dynamo = new DynamoDB.DocumentClient({ apiVersion: '2012-08-10', region: p
 
 const sendMessage = async (ConnectionId: string, Data: string) => await api.postToConnection({ ConnectionId, Data }).promise();
 
+/**
+ * Forward the user message to all the clients inside the group
+ */
 exports.handler = async (event: APIGatewayEvent) => {
     const user_id = event.requestContext.connectionId;
 
