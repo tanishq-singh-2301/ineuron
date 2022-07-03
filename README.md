@@ -1,5 +1,7 @@
 <i>
 
+# I'm 16 and worked solo here!! uff.
+
 ## What is this? 🤔
 ---
 Ever feel like you could talk to someone while watching a movie or a lecture. Koi na now you got streamly with this you can chat with the persons you are already watching the same video as you are.

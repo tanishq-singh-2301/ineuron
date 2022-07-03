@@ -21,6 +21,7 @@ const Play = (): JSX.Element => {
     const [userMessages, setUserMessages] = useState<{ name: string, time: string, message: string, uri: string }[]>([]);
     const video = useRef<ReactPlayer | null>(null);
     const { sendMessage, lastMessage, readyState } = useWebSocket(process.env.REACT_APP_PUBLIC_WS_ENDPOINT as string);
+    const [live, setLive] = useState(1);
 
     useEffect(() => {
         if (params.index) setShow(parseInt(params.index) - 1)
@@ -51,6 +52,10 @@ const Play = (): JSX.Element => {
                 setUserMessages(prev => [...prev, { name: jsonData.name, message: jsonData.message, time: moment().fromNow(), uri: jsonData.uri }])
                 break;
 
+            case "usersConnected":
+                setLive(jsonData.names.length)
+                break;
+
             default:
                 break;
         }
@@ -73,7 +78,7 @@ const Play = (): JSX.Element => {
                                     </HStack>
                                     <Box>
                                         <Text color="gray.400" fontSize="md">
-                                            <Text color="blue.500" underline fontSize="md" onPress={() => video.current?.seekTo(time_of_video)}>{time_of_video},</Text>
+                                            <Text color="blue.500" underline fontSize="md" onPress={() => video.current?.seekTo(time_of_video)}>time</Text>
                                             &ensp;{message.split(":time:")[0]}
                                         </Text>
                                     </Box>
@@ -116,8 +121,7 @@ const Play = (): JSX.Element => {
 
                         {isOpen ? "" : <VStack width="full">
                             <HStack px="6" justifyContent="flex-start">
-                                <Text color="gray.400" fontSize="xs">{shows[show].date}</Text>
-                                &ensp;.
+                                <Text color="gray.400" fontSize="xs">{shows[show].date}</Text>&ensp;.
                                 <Text color="gray.400" fontSize="xs">{shows[show].rating}</Text>
                             </HStack>
                             <Box px="6" py="3" >
@@ -158,9 +162,14 @@ const Play = (): JSX.Element => {
             <Hidden till="lg">
                 <Stack direction={["column", "column", "column", "row"]} height="full" bg="muted.900" width={["full", "full", "full", "2/5", "2/6"]}>
                     <VStack width="full" height="full" px="5">
-                        <HStack height="16" width="full" justifyContent="flex-end" alignItems="center" borderBottomColor="gray.700" borderBottomWidth="1">
-                            <IoSearchOutline size={26} color="white" />
-                            <Avatar source={{ uri: profile_uri }} alignSelf="center" bg="amber.500" size="9" ml="8" />
+                        <HStack height="16" width="full" justifyContent="space-between" alignItems="center" borderBottomColor="gray.700" borderBottomWidth="1">
+                            <HStack>
+                                <Text fontSize="md" fontWeight="medium" color="error.600" >Live {live}</Text>
+                            </HStack>
+                            <HStack>
+                                <IoSearchOutline size={26} color="white" />
+                                <Avatar source={{ uri: profile_uri }} alignSelf="center" bg="amber.500" size="9" ml="8" />
+                            </HStack>
                         </HStack>
                         <Center height="90%" width="full" py="8" >
                             <VStack height="full" width="full" borderRadius="2" borderWidth="1" borderColor="gray.700">
