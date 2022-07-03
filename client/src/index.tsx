@@ -8,7 +8,7 @@ import './globals.css';
 
 const theme = extendTheme({
   config: {
-    initialColorMode: "light",
+    initialColorMode: "dark",
   },
 });
 
