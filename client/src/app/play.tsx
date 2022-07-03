@@ -1,7 +1,7 @@
 import { AspectRatio, Box, Text, Heading, Hidden, HStack, Stack, VStack, Button, Center, ChevronUpIcon, Avatar, Input, ChevronRightIcon, CloseIcon } from 'native-base';
 import shows from '../data';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { IoSearchOutline } from 'react-icons/io5';
 import { faker } from '@faker-js/faker';
@@ -16,28 +16,25 @@ const Play = (): JSX.Element => {
     const navigate = useNavigate();
     // const { colorMode } = useColorMode();
     const [show, setShow] = useState<number | null>(null);
-    const [isOpen, setIsOpen] = useState(false);
-    const [message, setMessage] = useState("");
-    const [userMessages, setUserMessages] = useState<{ name: string, time: string, message: string, uri: string }[]>([])
-
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [message, setMessage] = useState<string>("");
+    const [userMessages, setUserMessages] = useState<{ name: string, time: string, message: string, uri: string }[]>([]);
+    const video = useRef<ReactPlayer | null>(null);
     const { sendMessage, lastMessage, readyState } = useWebSocket(process.env.REACT_APP_PUBLIC_WS_ENDPOINT as string);
 
     useEffect(() => {
         if (params.index) setShow(parseInt(params.index) - 1)
         else navigate("/");
-
         // eslint-disable-next-line
     }, []);
 
     useEffect(() => {
-        if ((readyState === 1) && (show !== null)) {
+        if ((readyState === 1) && (show !== null))
             sendMessage(JSON.stringify({
                 action: "join",
                 uid: shows[show].yt.split("v=")[1],
                 name
-            }))
-        }
-
+            }));
         // eslint-disable-next-line
     }, [readyState]);
 
@@ -57,7 +54,6 @@ const Play = (): JSX.Element => {
             default:
                 break;
         }
-
     }, [lastMessage]);
 
     const Messages = () => {
@@ -65,6 +61,8 @@ const Play = (): JSX.Element => {
             <>
                 {
                     userMessages.map(({ message, name, time, uri }) => {
+                        const time_of_video = parseInt(message.split(":time:")[1])
+
                         return (
                             <HStack key={Math.random()} width="full" justifyContent="flex-end" alignItems="flex-end" py="5" px="6" borderTopColor="gray.700" borderTopWidth="1">
                                 <Box width="15%"><Avatar source={{ uri }} alignSelf="flex-start" bg="amber.500" size="sm" mr="6" /></Box>
@@ -74,7 +72,10 @@ const Play = (): JSX.Element => {
                                         <Text color="gray.500" fontWeight="medium" fontSize="sm" pb="1">{time}</Text>
                                     </HStack>
                                     <Box>
-                                        <Text color="gray.400" fontSize="md">{message}</Text>
+                                        <Text color="gray.400" fontSize="md">
+                                            <Text color="blue.500" underline fontSize="md" onPress={() => video.current?.seekTo(time_of_video)}>{time_of_video},</Text>
+                                            &ensp;{message.split(":time:")[0]}
+                                        </Text>
                                     </Box>
                                 </VStack>
                             </HStack>
@@ -99,6 +100,7 @@ const Play = (): JSX.Element => {
                                 width="100%"
                                 height="100%"
                                 controls={true}
+                                ref={video}
                             />
                         </HStack>
                     </AspectRatio>
@@ -134,15 +136,14 @@ const Play = (): JSX.Element => {
                                 <Avatar source={{ uri: profile_uri }} alignSelf="center" bg="amber.500" size="sm" />
                                 <Input type="text" w="70%" variant="underlined" placeholder="Enter Message" value={message} color="white" onChangeText={(t) => setMessage(t)} />
                                 <Button size="xs" rounded="none" variant="ghost" w="10%" onPress={() => {
-                                    if (message.length > 0) {
+                                    if (message.length > 0)
                                         sendMessage(JSON.stringify({
                                             action: "message",
                                             uid: shows[show ?? 0].yt.split("v=")[1],
                                             name,
-                                            message,
+                                            message: message.concat(":time:", `${video.current?.getCurrentTime()}`),
                                             uri: profile_uri
-                                        }))
-                                    }
+                                        }));
                                 }}>
                                     <ChevronRightIcon />
                                 </Button>
@@ -170,15 +171,14 @@ const Play = (): JSX.Element => {
                                     <Avatar source={{ uri: profile_uri }} alignSelf="center" bg="amber.500" size="sm" />
                                     <Input type="text" w="70%" variant="underlined" placeholder="Enter Message" value={message} color="white" onChangeText={(t) => setMessage(t)} />
                                     <Button size="xs" rounded="none" variant="ghost" w="10%" onPress={() => {
-                                        if (message.length > 0) {
+                                        if (message.length > 0)
                                             sendMessage(JSON.stringify({
                                                 action: "message",
                                                 uid: shows[show ?? 0].yt.split("v=")[1],
                                                 name,
-                                                message,
+                                                message: message.concat(":time:", `${Math.floor(video.current?.getCurrentTime() ?? 0)}`),
                                                 uri: profile_uri
-                                            }))
-                                        }
+                                            }));
                                     }}>
                                         <ChevronRightIcon />
                                     </Button>

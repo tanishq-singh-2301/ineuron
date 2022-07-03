@@ -11,7 +11,7 @@ we use highly scalable websockets to provide connection to every single user.
 
 ### Technologies we use 😄
 - API Gateway, Lambda, DynamoDB -> Server
-- React, ec2, serve -> Client
+- React, ec2, serve, nativebase -> Client
 - Typescript, ESlint -> To maintain code
 - Github workflow -> To manage ci/cd
 - Nginx -> Proxy Management
